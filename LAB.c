@@ -699,4 +699,481 @@ void main()
     }
 }
 
+7.#include <stdio.h>
+
+int main() {
+    int arr[5] = {10, 20, 30, 40, 50};
+    int *ptr;
+
+    ptr = &arr[2]; 
+
+    printf("Original pointer (points to %d): %p\n", *ptr, (void*)ptr);
+
+    ptr--;
+    printf("Decremented pointer (points to %d): %p\n", *ptr, (void*)ptr);
+
+    ptr = &arr[2]; 
+    ptr = ptr + 2; 
+    printf("Addition (ptr + 2) (points to %d): %p\n", *ptr, (void*)ptr);
+
+    ptr = &arr[2]; 
+    ptr = ptr - 1; 
+    printf("Subtraction (ptr - 1) (points to %d): %p\n", *ptr, (void*)ptr);
+
+    return 0;
+}
+
+8.#include <stdio.h>
+
+int main() {
+    int source[5] = {1, 2, 3, 4, 5};
+    int dest[5];
+    
+    int *p_source = source;
+    int *p_dest = dest;
+    int *p_end = source + 5; 
+    int i;
+
+    while (p_source < p_end) {
+        *p_dest = *p_source;
+        p_source++;
+        p_dest++;
+    }
+
+    printf("Copied 'dest' array: ");
+    for (i = 0; i < 5; i++) {
+        printf("%d ", dest[i]);
+    }
+    printf("\n");
+
+    return 0;
+}
+
+9.#include <stdio.h>
+
+struct Date {
+    int day;
+    int month;
+    int year;
+};
+
+int main() {
+    struct Date date1, date2;
+
+    printf("Enter first date (dd mm yyyy): ");
+    scanf("%d %d %d", &date1.day, &date1.month, &date1.year);
+
+    printf("Enter second date (dd mm yyyy): ");
+    scanf("%d %d %d", &date2.day, &date2.month, &date2.year);
+
+    if (date1.year < date2.year) {
+        printf("Date 1 (%d/%d/%d) is earlier.\n", date1.day, date1.month, date1.year);
+    } else if (date1.year > date2.year) {
+        printf("Date 2 (%d/%d/%d) is earlier.\n", date2.day, date2.month, date2.year);
+    } else {
+        if (date1.month < date2.month) {
+            printf("Date 1 (%d/%d/%d) is earlier.\n", date1.day, date1.month, date1.year);
+        } else if (date1.month > date2.month) {
+            printf("Date 2 (%d/%d/%d) is earlier.\n", date2.day, date2.month, date2.year);
+        } else {
+            if (date1.day < date2.day) {
+                printf("Date 1 (%d/%d/%d) is earlier.\n", date1.day, date1.month, date1.year);
+            } else if (date1.day > date2.day) {
+                printf("Date 2 (%d/%d/%d) is earlier.\n", date2.day, date2.month, date2.year);
+            } else {
+                printf("Both dates are the same.\n");
+            }
+        }
+    }
+
+    return 0;
+}
+10.#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+
+struct Book {
+    char title[100];
+    char author[100];
+    char isbn[20];
+    double price;
+};
+
+struct Book library[100];
+int book_count = 0;
+
+void add_book() {
+    if (book_count >= 100) {
+        printf("Library is full!\n");
+        return;
+    }
+    printf("Enter title: ");
+    getchar(); 
+    fgets(library[book_count].title, 100, stdin);
+    library[book_count].title[strcspn(library[book_count].title, "\n")] = 0;
+
+    printf("Enter author: ");
+    fgets(library[book_count].author, 100, stdin);
+    library[book_count].author[strcspn(library[book_count].author, "\n")] = 0;
+
+    printf("Enter ISBN: ");
+    fgets(library[book_count].isbn, 20, stdin);
+    library[book_count].isbn[strcspn(library[book_count].isbn, "\n")] = 0;
+
+    printf("Enter price: ");
+    scanf("%lf", &library[book_count].price);
+    
+    book_count++;
+    printf("Book added successfully.\n");
+}
+
+void display_all() {
+    int i;
+    if (book_count == 0) {
+        printf("No books in library.\n");
+        return;
+    }
+    for (i = 0; i < book_count; i++) {
+        printf("\n--- Book %d ---\n", i + 1);
+        printf("Title: %s\n", library[i].title);
+        printf("Author: %s\n", library[i].author);
+        printf("ISBN: %s\n", library[i].isbn);
+        printf("Price: %.2f\n", library[i].price);
+    }
+}
+
+void search_title() {
+    char search_term[100];
+    int i, found = 0;
+    printf("Enter title to search: ");
+    getchar();
+    fgets(search_term, 100, stdin);
+    search_term[strcspn(search_term, "\n")] = 0;
+
+    for (i = 0; i < book_count; i++) {
+        if (strcmp(library[i].title, search_term) == 0) {
+            printf("Book found:\n");
+            printf("Title: %s\n", library[i].title);
+            printf("Author: %s\n", library[i].author);
+            printf("ISBN: %s\n", library[i].isbn);
+            printf("Price: %.2f\n", library[i].price);
+            found = 1;
+            break;
+        }
+    }
+    if (!found) {
+        printf("No book found with that title.\n");
+    }
+}
+
+void search_author() {
+    char search_term[100];
+    int i, found = 0;
+    printf("Enter author to search: ");
+    getchar();
+    fgets(search_term, 100, stdin);
+    search_term[strcspn(search_term, "\n")] = 0;
+
+    for (i = 0; i < book_count; i++) {
+        if (strcmp(library[i].author, search_term) == 0) {
+            printf("\n--- Book Found ---\n");
+            printf("Title: %s\n", library[i].title);
+            printf("Author: %s\n", library[i].author);
+            printf("ISBN: %s\n", library[i].isbn);
+            printf("Price: %.2f\n", library[i].price);
+            found = 1;
+        }
+    }
+    if (!found) {
+        printf("No books found by that author.\n");
+    }
+}
+
+void delete_book() {
+    char search_term[100];
+    int i, j, found_index = -1;
+    
+    printf("Enter title of book to delete: ");
+    getchar();
+    fgets(search_term, 100, stdin);
+    search_term[strcspn(search_term, "\n")] = 0;
+
+    for (i = 0; i < book_count; i++) {
+        if (strcmp(library[i].title, search_term) == 0) {
+            found_index = i;
+            break;
+        }
+    }
+
+    if (found_index == -1) {
+        printf("Book not found.\n");
+    } else {
+        for (j = found_index; j < book_count - 1; j++) {
+            library[j] = library[j + 1];
+        }
+        book_count--;
+        printf("Book deleted successfully.\n");
+    }
+}
+
+int main() {
+    int choice = 0;
+    while (choice != 6) {
+        printf("\n--- Book Management System ---\n");
+        printf("1. Add Book\n");
+        printf("2. Delete Book (by Title)\n");
+        printf("3. Search by Title\n");
+        printf("4. Search by Author\n");
+        printf("5. Display All Books\n");
+        printf("6. Exit\n");
+        printf("Enter your choice: ");
+        scanf("%d", &choice);
+
+        switch (choice) {
+            case 1:
+                add_book();
+                break;
+            case 2:
+                delete_book();
+                break;
+            case 3:
+                search_title();
+                break;
+            case 4:
+                search_author();
+                break;
+            case 5:
+                display_all();
+                break;
+            case 6:
+                printf("Exiting...\n");
+                break;
+            default:
+                printf("Invalid choice. Please try again.\n");
+        }
+    }
+    return 0;
+}
+
+
+//LAB10
+1.#include <stdio.h>
+#include <stdlib.h> 
+
+int main() {
+    FILE *file_pointer;
+    
+    char buffer[256]; 
+
+    file_pointer = fopen("input1.txt", "r");
+
+    if (file_pointer == NULL) {
+        perror("Error opening file"); 
+        return 1; 
+    }
+
+    if (fgets(buffer, 256, file_pointer) != NULL) {
+        printf("The first sentence/line from the file is:\n");
+        printf("%s", buffer);
+    } else {
+        printf("Could not read from file or file is empty.\n");
+    }
+
+    fclose(file_pointer);
+
+    return 0; 
+}
+
+2.#include <stdio.h>
+#include <stdlib.h> 
+
+int main() {
+    FILE *file_pointer;
+    char *text_to_write = "This is a new line appended to the file.\n";
+
+    file_pointer = fopen("input2.txt", "a");
+
+    if (file_pointer == NULL) {
+        perror("Error opening file");
+        return 1;
+    }
+
+    if (fputs(text_to_write, file_pointer) == EOF) {
+        printf("Error writing to file.\n");
+    } else {
+        printf("Successfully wrote the line to the end of %s\n", "input2.txt");
+    }
+
+    fclose(file_pointer);
+
+    return 0;
+}
+
+3.#include <stdio.h>
+#include <stdlib.h> 
+
+int main() {
+    FILE *source_file, *dest_file;
+    int c; 
+
+    source_file = fopen("source3.txt", "r");
+    if (source_file == NULL) {
+        perror("Error opening source file");
+        return 1;
+    }
+
+    dest_file = fopen("destination3.txt", "w");
+    if (dest_file == NULL) {
+        perror("Error opening destination file");
+        fclose(source_file); 
+        return 1;
+    }
+
+    while ((c = fgetc(source_file)) != EOF) {
+        fputc(c, dest_file);
+    }
+
+    printf("Successfully copied %s to %s\n", "source3.txt", "destination3.txt");
+
+    fclose(source_file);
+    fclose(dest_file);
+
+    return 0;
+}
+
+4.#include <stdio.h>
+#include <stdlib.h> 
+#include <ctype.h>  
+
+int main() {
+    FILE *source_file, *dest_file;
+    int c; 
+
+    source_file = fopen("source4.txt", "r");
+    if (source_file == NULL) {
+        perror("Error opening source file");
+        return 1;
+    }
+
+    dest_file = fopen("destination_upper4.txt", "w");
+    if (dest_file == NULL) {
+        perror("Error opening destination file");
+        fclose(source_file);
+        return 1;
+    }
+
+    while ((c = fgetc(source_file)) != EOF) {
+        int upper_c = toupper(c);
+        fputc(upper_c, dest_file);
+    }
+
+    printf("Successfully copied %s to %s (in uppercase)\n", "source4.txt", "destination_upper4.txt");
+
+    fclose(source_file);
+    fclose(dest_file);
+
+    return 0;
+}
+
+5.#include <stdio.h>
+#include <stdlib.h> 
+#include <ctype.h>  
+
+int main() {
+    FILE *file;
+    int c;
+    long char_count = 0;
+    long word_count = 0;
+    long line_count = 0;
+    
+    int in_word = 0; 
+
+    file = fopen("input5.txt", "r");
+    if (file == NULL) {
+        perror("Error opening file");
+        return 1;
+    }
+
+    while ((c = fgetc(file)) != EOF) {
+        char_count++;
+
+        if (c == '\n') {
+            line_count++;
+        }
+
+        if (isspace(c)) {
+            in_word = 0;
+        } else if (in_word == 0) {
+            in_word = 1;
+            word_count++;
+        }
+    }
+    
+    printf("File: %s\n", "input5.txt");
+    printf("Characters: %ld\n", char_count);
+    printf("Words:      %ld\n", word_count);
+    printf("Lines:      %ld\n", line_count);
+
+    fclose(file);
+    return 0;
+}
+
+6.#include <stdio.h>
+#include <stdlib.h> 
+
+int main() {
+    FILE *file;
+    char filename[100];
+    int n;
+    int c;
+    long file_size;
+    long offset;
+
+    printf("Enter file name: ");
+    scanf("%99s", filename); 
+
+    printf("Enter the number of last characters to display: ");
+    scanf("%d", &n);
+
+    file = fopen(filename, "r");
+    if (file == NULL) {
+        perror("Error opening file");
+        return 1;
+    }
+
+    if (fseek(file, 0, SEEK_END) != 0) {
+        printf("Error seeking in file.\n");
+        fclose(file);
+        return 1;
+    }
+
+    file_size = ftell(file);
+    if (file_size < 0) {
+        perror("Error getting file size");
+        fclose(file);
+        return 1;
+    }
+
+    offset = (n > file_size) ? file_size : n;
+    
+    if (fseek(file, -offset, SEEK_END) != 0) {
+        printf("Error seeking backwards.\n");
+        fclose(file);
+        return 1;
+    }
+    
+    printf("\n--- Last %d characters of %s ---\n", (int)offset, filename);
+
+    while ((c = fgetc(file)) != EOF) {
+        putchar(c); 
+    }
+
+    printf("\n--- End of file ---\n");
+
+    fclose(file);
+    return 0;
+}
+
+
+
 
